@@ -423,7 +423,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   </details>
 
-* <a id='trailing-comma-array'></a>(<a href='#trailing-comma-array'>link</a>) **Add a trailing comma on the last element of a multi-line array.** [![SwiftFormat: trailingCommas](https://img.shields.io/badge/SwiftFormat-trailingCommas-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#trailingCommas)
+* <a id='trailing-comma-array'></a>(<a href='#trailing-comma-array'>link</a>) **Don't add a trailing comma on the last element of a multi-line array.** [![SwiftFormat: trailingCommas](https://img.shields.io/badge/SwiftFormat-trailingCommas-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#trailingCommas)
 
   <details>
 
@@ -432,14 +432,14 @@ _You can enable the following settings in Xcode by running [this script](resourc
   let rowContent = [
     listingUrgencyDatesRowContent(),
     listingUrgencyBookedRowContent(),
-    listingUrgencyBookedShortRowContent()
+    listingUrgencyBookedShortRowContent(),
   ]
 
   // RIGHT
   let rowContent = [
     listingUrgencyDatesRowContent(),
     listingUrgencyBookedRowContent(),
-    listingUrgencyBookedShortRowContent(),
+    listingUrgencyBookedShortRowContent()
   ]
   ```
 
