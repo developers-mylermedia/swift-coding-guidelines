@@ -1,4 +1,4 @@
-# Airbnb Swift Style Guide
+# Myler Media Swift Style Guide, based on and forked from the Airbnb Swift Style Guide
 
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fairbnb%2Fswift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/airbnb/swift) [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fairbnb%2Fswift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/airbnb/swift)
 
@@ -29,7 +29,7 @@ This repo includes a Swift Package Manager command plugin that you can use to au
 
 ```swift
 dependencies: [
-  .package(url: "https://github.com/airbnb/swift", from: "1.0.0"),
+  .package(url: "https://github.com/developers-mylermedia/swift-coding-guidelines", from: "1.0.0"),
 ]
 ```
 
