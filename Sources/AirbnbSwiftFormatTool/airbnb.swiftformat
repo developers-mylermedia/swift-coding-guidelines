@@ -2,7 +2,7 @@
 --swiftversion 5.6
 --self remove # redundantSelf
 --importgrouping testable-bottom # sortedImports
---commas always # trailingCommas
+--commas inline # trailingCommas
 --trimwhitespace always # trailingSpace
 --indent 2 #indent
 --ifdef no-indent #indent
