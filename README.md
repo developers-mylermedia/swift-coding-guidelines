@@ -690,14 +690,14 @@ _You can enable the following settings in Xcode by running [this script](resourc
   let rowContent = [
     listingUrgencyDatesRowContent(),
     listingUrgencyBookedRowContent(),
-    listingUrgencyBookedShortRowContent()
+    listingUrgencyBookedShortRowContent(),
   ]
 
   // RIGHT
   let rowContent = [
     listingUrgencyDatesRowContent(),
     listingUrgencyBookedRowContent(),
-    listingUrgencyBookedShortRowContent(),
+    listingUrgencyBookedShortRowContent()
   ]
   ```
 
