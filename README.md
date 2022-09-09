@@ -2463,16 +2463,16 @@ We encourage you to fork this guide and change the rules to fit your team’s st
 
 ## Storyboards
 
-* <a id='storyboards'></a>(<a href='#storyboards'>link</a>) **Do not use storyboards** Do not create Storyboards. Instead, add a separate file with an extension to the corresponding ViewController. Preferred name format of the file would be <ViewController>+UI.swift
+* <a id='storyboards'></a>(<a href='#storyboards'>link</a>) **Do not use storyboards.** Do not create Storyboards. Instead, add a separate file with an extension to the corresponding ViewController. Preferred name format of the file would be <ViewController>+UI.swift
 
 ## Todo's
 
-* <a id='todos'></a>(<a href='#todos'>link</a>) **Add a TODO when code isn't complete or up to standards** When having open to-do’s, always make sure to use // TODO:
+* <a id='todos'></a>(<a href='#todos'>link</a>) **Add a TODO when code isn't complete or up to standards.** When having open to-do’s, always make sure to use // TODO:
 
  <details>
 
   ```swift
-  func dummyDelegateMethod() {
+  func notCompletedMethod() {
     // TODO: Fill this function
   }
   ```
@@ -2482,6 +2482,6 @@ We encourage you to fork this guide and change the rules to fit your team’s st
   
 ## UserDefaults
 
-* <a id='userdefaults'></a>(<a href='#userdefaults'>link</a>) **Use enums for UserDefaults** All entries done must be added to the UserDefaultKeys Enum in the Config Folder. Also add documentation of the type that is stored for that key in the UserDefaults and explain in one sentence what this key is used for.
+* <a id='userdefaults'></a>(<a href='#userdefaults'>link</a>) **Use enums for UserDefaults.** All entries done must be added to the UserDefaultKeys Enum in the Config Folder. Also add documentation of the type that is stored for that key in the UserDefaults and explain in one sentence what this key is used for.
 
 **[⬆ back to top](#table-of-contents)**
