@@ -413,7 +413,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
     func request(completion: () -> Void) {
       API.request() { [weak self] response in
-        guard let self = self else { return }
+        guard let self else { return }
         // Do work
         completion()
       }
@@ -729,6 +729,38 @@ _You can enable the following settings in Xcode by running [this script](resourc
     & CivilizationServiceProviding
   ```
 
+* <a id='prefer-if-let-shorthand'></a>(<a href='#prefer-if-let-shorthand'>link</a>) Omit the right-hand side of the expression when unwrapping an optional property to a non-optional property with the same name. [![SwiftFormat: redundantOptionalBinding](https://img.shields.io/badge/SwiftFormat-redundantOptionalBinding-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#redundantOptionalBinding)
+
+  <details>
+
+  #### Why?
+
+  Following the rationale in [SE-0345](https://github.com/apple/swift-evolution/blob/main/proposals/0345-if-let-shorthand.md), this shorthand syntax removes unnecessary boilerplate while retaining clarity.
+
+  ```swift
+  // WRONG
+  if
+    let galaxy = galaxy,
+    galaxy.name == "Milky Way"
+  { … }
+
+  guard
+    let galaxy = galaxy,
+    galaxy.name == "Milky Way"
+  else { … }
+
+  // RIGHT
+  if
+    let galaxy,
+    galaxy.name == "Milky Way"
+  { … }
+
+  guard
+    let galaxy,
+    galaxy.name == "Milky Way"
+  else { … }
+  ```
+
 * <a id='multi-line-conditions'></a>(<a href='#multi-line-conditions'>link</a>) **Multi-line conditional statements should break after the leading keyword.** Indent each individual statement by [2 spaces](https://github.com/airbnb/swift#spaces-over-tabs). [![SwiftFormat: wrapArguments](https://img.shields.io/badge/SwiftFormat-wrapArguments-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#wrapArguments)
 
   <details>
@@ -739,12 +771,12 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   ```swift
   // WRONG
-  if let galaxy = galaxy,
+  if let galaxy,
     galaxy.name == "Milky Way" // Indenting by two spaces fights Xcode's ^+I indentation behavior
   { … }
 
   // WRONG
-  guard let galaxy = galaxy,
+  guard let galaxy,
         galaxy.name == "Milky Way" // Variable width indentation (6 spaces)
   else { … }
 
@@ -757,13 +789,13 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   // RIGHT
   if
-    let galaxy = galaxy,
+    let galaxy,
     galaxy.name == "Milky Way"
   { … }
 
   // RIGHT
   guard
-    let galaxy = galaxy,
+    let galaxy,
     galaxy.name == "Milky Way"
   else { … }
 
@@ -776,12 +808,12 @@ _You can enable the following settings in Xcode by running [this script](resourc
   else { … }
 
   // RIGHT
-  if let galaxy = galaxy {
+  if let galaxy {
     …
   }
 
   // RIGHT
-  guard let galaxy = galaxy else {
+  guard let galaxy else {
     …
   }
   ```
@@ -1496,6 +1528,33 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   </details>
 
+* <a id='prefer-bound-generic-extension-shorthand'></a>(<a href='#prefer-bound-generic-extension-shorthand'>link</a>) When extending bound generic types, prefer using generic bracket syntax (`extension Collection<Planet>`), or sugared syntax for applicable standard library types (`extension [Planet]`) instead of generic type constraints. [![SwiftFormat: genericExtensions](https://img.shields.io/badge/SwiftFormat-genericExtensions-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#genericExtensions)
+
+  <details>
+
+  ```swift
+  // WRONG
+  extension Array where Element == Star { … }
+  extension Optional where Wrapped == Spaceship { … }
+  extension Dictionary where Key == Moon, Element == Planet { … }
+  extension Collection where Element == Universe { … }
+  extension StateStore where State == SpaceshipState, Action == SpaceshipAction { … }
+
+  // RIGHT
+  extension [Star] { … }
+  extension Spaceship? { … }
+  extension [Moon: Planet] { … }
+  extension Collection<Universe> { … }
+  extension StateStore<SpaceshipState, SpaceshipAction> { … }
+
+  // ALSO RIGHT -- there are multiple types that could satifsy this constraint
+  // (e.g. [Planet], [Moon]), so this is not a "bound generic type" and isn't
+  // eligible for the generic bracket syntax.
+  extension Array where Element: PlanetaryBody { }
+  ```
+
+  </details>
+
 **[⬆ back to top](#table-of-contents)**
 
 ## Patterns
@@ -1578,7 +1637,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
     func request(completion: () -> Void) {
       API.request() { [weak self] response in
-        if let self = self {
+        if let self {
           // Processing and side effects
         }
         completion()
@@ -1591,7 +1650,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
     func request(completion: () -> Void) {
       API.request() { [weak self] response in
-        guard let self = self else { return }
+        guard let self else { return }
         self.doSomething(with: self.property, response: response)
         completion()
       }
