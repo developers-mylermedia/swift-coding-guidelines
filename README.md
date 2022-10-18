@@ -136,12 +136,12 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   </details>
 
-  _Exception: You may prefix a private property with an underscore if it is backing an identically-named property or method with a higher access level_
+  _Exception: You may prefix a private property with an underscore if it is backing an identically-named property or method with a higher access level._
 
   <details>
 
   #### Why?
-  There are specific scenarios where a backing a property or method could be easier to read than using a more descriptive name.
+  There are specific scenarios where backing a property or method could be easier to read than using a more descriptive name.
 
   - Type erasure
 
@@ -159,15 +159,14 @@ _You can enable the following settings in Xcode by running [this script](resourc
       onFailure: @escaping (Error) -> Void)
       -> URLSessionCancellable
     {
-      return _executeRequest(request, session, parser, onSuccess, onFailure)
+      return _executeRequest(request, onSuccess, onFailure)
     }
 
     private let _executeRequest: (
       URLRequest,
       @escaping (ModelType, Bool) -> Void,
-      @escaping (NSError) -> Void)
+      @escaping (Error) -> Void)
       -> URLSessionCancellable
-
   }
   ```
 
@@ -1547,7 +1546,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
   extension Collection<Universe> { … }
   extension StateStore<SpaceshipState, SpaceshipAction> { … }
 
-  // ALSO RIGHT -- there are multiple types that could satifsy this constraint
+  // ALSO RIGHT -- there are multiple types that could satisfy this constraint
   // (e.g. [Planet], [Moon]), so this is not a "bound generic type" and isn't
   // eligible for the generic bracket syntax.
   extension Array where Element: PlanetaryBody { }
@@ -2219,6 +2218,72 @@ _You can enable the following settings in Xcode by running [this script](resourc
       set { multiverseService.current = newValue }
     }
     ```
+
+    </details>
+
+* <a id='prefer-opaque-generic-parameters'></a>(<a href='#prefer-opaque-generic-parameters'>link</a>) **Prefer using opaque generic parameters (with `some`) over verbose named generic parameter syntax where possible.**  [![SwiftFormat: opaqueGenericParameters](https://img.shields.io/badge/SwiftFormat-opaqueGenericParameters-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#opaqueGenericParameters)
+
+    <details>
+
+    #### Why?
+
+    Opaque generic parameter syntax is significantly less verbose and thus more legible than the full named generic parameter syntax.
+
+    ```swift
+    // WRONG
+    func spaceshipDashboard<WarpDriveView: View, CaptainsLogView: View>(
+      warpDrive: WarpDriveView,
+      captainsLog: CaptainsLogView)
+      -> some View
+    { … }
+
+    func generate<Planets>(_ planets: Planets) where Planets: Collection, Planets.Element == Planet {
+      …
+    }
+
+    // RIGHT
+    func spaceshipDashboard(
+      warpDrive: some View,
+      captainsLog: some View)
+      -> some View
+    { … }
+
+    func generate(_ planets: some Collection<Planet>) {
+      …
+    }
+    
+    // Also fine, since there isn't an equivalent opaque parameter syntax for expressing
+    // that two parameters in the type signature are of the same type:
+    func terraform<Body: PlanetaryBody>(_ planetaryBody: Body, into terraformedBody: Body) {
+      …
+    }
+    
+    // Also fine, since the generic parameter name is referenced in the function body so can't be removed:
+    func terraform<Body: PlanetaryBody>(_ planetaryBody: Body)  {
+      planetaryBody.generateAtmosphere(Body.idealAtmosphere)
+    }
+    ```
+
+    #### `some Any`
+
+    Fully-unconstrained generic parameters are somewhat uncommon, but are equivalent to `some Any`. For example:
+
+    ```swift
+    func assertFailure<Value>(_ result: Result<Value, Error>) {
+      if case .failure(let error) = result {
+        XCTFail(error.localizedDescription)
+      }
+    }
+
+    // is equivalent to:
+    func assertFailure(_ result: Result<some Any, Error>) {
+      if case .failure(let error) = result {
+        XCTFail(error.localizedDescription)
+      }
+    }
+    ```
+
+    `some Any` is somewhat unintuitive, and the named generic parameter is useful in this situation to compensate for the weak type information. Because of this, prefer using named generic parameters instead of `some Any`.
 
     </details>
 
