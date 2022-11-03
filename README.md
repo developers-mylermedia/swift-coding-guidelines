@@ -141,7 +141,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
   <details>
 
   #### Why?
-  There are specific scenarios where backing a property or method could be easier to read than using a more descriptive name.
+  There are specific scenarios where a backing property or method that is prefixed with an underscore could be easier to read than using a more descriptive name.
 
   - Type erasure
 
@@ -2269,16 +2269,24 @@ _You can enable the following settings in Xcode by running [this script](resourc
     Fully-unconstrained generic parameters are somewhat uncommon, but are equivalent to `some Any`. For example:
 
     ```swift
-    func assertFailure<Value>(_ result: Result<Value, Error>) {
+    func assertFailure<Value>(
+      _ result: Result<Value, Error>,
+      file: StaticString = #filePath,
+      line: UInt = #line)
+    {
       if case .failure(let error) = result {
-        XCTFail(error.localizedDescription)
+        XCTFail(error.localizedDescription, file: file, line: line)
       }
     }
 
     // is equivalent to:
-    func assertFailure(_ result: Result<some Any, Error>) {
+    func assertFailure(
+      _ result: Result<some Any, Error>,
+      file: StaticString = #filePath,
+      line: UInt = #line)
+    {
       if case .failure(let error) = result {
-        XCTFail(error.localizedDescription)
+        XCTFail(error.localizedDescription, file: file, line: line)
       }
     }
     ```
