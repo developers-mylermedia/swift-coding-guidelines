@@ -6,7 +6,6 @@ let package = Package(
   platforms: [.macOS(.v10_13)],
   products: [
     .plugin(name: "FormatSwift", targets: ["FormatSwift"]),
-    .executable(name: "FormatSwift", targets: ["FormatSwift"]),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-argument-parser", from: "1.0.3"),
