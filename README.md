@@ -395,7 +395,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
   <details>
 
   ```swift
-  //WRONG
+  // WRONG
   class MyClass {
 
     func request(completion: () -> Void) {
@@ -1152,7 +1152,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   </details>
 
-* <a id='long-function-declaration'></a>(<a href='#long-function-declaration'>link</a>) **Separate [long](https://github.com/airbnb/swift#column-width) function declarations with line breaks before each argument label and before the return signature.** Put the open curly brace on the next line so the first executable line doesn't look like it's another parameter. [![SwiftFormat: wrapArguments](https://img.shields.io/badge/SwiftFormat-wrapArguments-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#wrapArguments) [![SwiftFormat: braces](https://img.shields.io/badge/SwiftFormat-braces-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#braces)
+* <a id='long-function-declaration'></a>(<a href='#long-function-declaration'>link</a>) **Separate [long](https://github.com/airbnb/swift#column-width) function declarations with line breaks before each argument label, and before the return signature or any effects (`async`, `throws`).** Put the open curly brace on the next line so the first executable line doesn't look like it's another parameter. [![SwiftFormat: wrapArguments](https://img.shields.io/badge/SwiftFormat-wrapArguments-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#wrapArguments) [![SwiftFormat: braces](https://img.shields.io/badge/SwiftFormat-braces-7B0051.svg)](https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md#braces)
 
   <details>
 
@@ -1192,6 +1192,17 @@ _You can enable the following settings in Xcode by running [this script](resourc
       populateUniverse() // this line blends in with the argument list
     }
 
+    // WRONG
+    func generateStars(
+      at location: Point,
+      count: Int,
+      color: StarColor,
+      withAverageDistance averageDistance: Float) async throws // these effects are easy to miss since they're visually associated with the last parameter
+      -> String 
+    {
+      populateUniverse()
+    }
+
     // RIGHT
     func generateStars(
       at location: Point,
@@ -1209,7 +1220,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
       count: Int,
       color: StarColor,
       withAverageDistance averageDistance: Float)
-      throws -> String
+      async throws -> String
     {
       populateUniverse()
     }
@@ -1631,7 +1642,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
   <details>
 
   ```swift
-  //WRONG
+  // WRONG
   class MyClass {
 
     func request(completion: () -> Void) {
@@ -2103,7 +2114,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   #### Why?
 
-  [SE-0156](https://github.com/apple/swift-evolution/blob/master/proposals/0156-subclass-existentials.md]), which introduced support for using the `AnyObject` keyword as a protocol constraint, recommends preferring `AnyObject` over `class`:
+  [SE-0156](https://github.com/apple/swift-evolution/blob/master/proposals/0156-subclass-existentials.md), which introduced support for using the `AnyObject` keyword as a protocol constraint, recommends preferring `AnyObject` over `class`:
 
   > This proposal merges the concepts of `class` and `AnyObject`, which now have the same meaning: they represent an existential for classes. To get rid of the duplication, we suggest only keeping `AnyObject` around. To reduce source-breakage to a minimum, `class` could be redefined as `typealias class = AnyObject` and give a deprecation warning on class for the first version of Swift this proposal is implemented in. Later, `class` could be removed in a subsequent version of Swift.
 
@@ -2319,7 +2330,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
 
   import Foundation
 
-  //RIGHT
+  // RIGHT
 
   //  Copyright © 2018 Airbnb. All rights reserved.
   //
@@ -2348,7 +2359,7 @@ _You can enable the following settings in Xcode by running [this script](resourc
   import Nimble
   import Quick
 
-  //RIGHT
+  // RIGHT
 
   //  Copyright © 2018 Airbnb. All rights reserved.
   //
