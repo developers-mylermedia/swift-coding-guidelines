@@ -2,7 +2,7 @@
 --exclude Carthage,Pods,.build
 
 # options
---swiftversion 5.7
+--swiftversion 5.8
 --closingparen same-line # wrapArguments
 --commas inline # trailingCommas
 --emptybraces spaced # emptyBraces
