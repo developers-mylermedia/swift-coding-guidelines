@@ -47,7 +47,6 @@
 --rules conditionalAssignment
 --rules consecutiveBlankLines
 --rules consecutiveSpaces
---rules docComments
 --rules duplicateImports
 --rules elseOnSameLine
 --rules emptyBraces
