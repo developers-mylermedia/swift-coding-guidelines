@@ -17,11 +17,10 @@ opt_in_rules:
 - private_outlet
 
 excluded:
-  - Carthage
-  - Pods
-  - .build
-  - DefaultProject/Config/Swiftgen
-  - BuildTools
+  - ../Carthage
+  - ../Pods
+  - ../.build
+  - ../BuildTools
 
 indentation: 4
 line_length: 120
