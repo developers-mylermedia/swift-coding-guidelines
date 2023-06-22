@@ -1,12 +1,12 @@
 import ArgumentParser
 import Foundation
 
-// MARK: - AirbnbSwiftFormatTool
+// MARK: - MylerSwiftFormatTool
 
-/// A command line tool that formats the given directories using SwiftFormat and SwiftLint,
-/// based on the Airbnb Swift Style Guide
+/// A command line tool that formats the given directories using SwiftFormat, SwiftLint and SwiftGen,
+/// based on the Myler Swift Style Guide
 @main
-struct AirbnbSwiftFormatTool: ParsableCommand {
+struct MylerSwiftFormatTool: ParsableCommand {
 
   // MARK: Internal
 
@@ -25,38 +25,57 @@ struct AirbnbSwiftFormatTool: ParsableCommand {
   @Option(help: "The absolute path to use for SwiftLint's cache")
   var swiftLintCachePath: String?
 
+  @Option(help: "The absolute path to a SwiftGen binary")
+  var swiftGenPath: String
+
   @Flag(help: "When true, source files are not reformatted")
   var lint = false
+
+  @Flag(help: "When true, skips lint and format and run SwiftGen")
+  var assetsGeneration = false
 
   @Flag(help: "When true, logs the commands that are executed")
   var log = false
 
   @Option(help: "The absolute path to the SwiftFormat config file")
-  var swiftFormatConfig = Bundle.module.path(forResource: "airbnb", ofType: "swiftformat")!
+  var swiftFormatConfig = Bundle.module.path(forResource: "default", ofType: "swiftformat")!
 
   @Option(help: "The absolute path to the SwiftLint config file")
   var swiftLintConfig = Bundle.module.path(forResource: "swiftlint", ofType: "yml")!
+
+  @Option(help: "The absolute path to the SwiftLint config file")
+  var swiftGenConfig = Bundle.module.path(forResource: "swiftgen", ofType: "yml")!
 
   @Option(help: "The project's minimum Swift version")
   var swiftVersion: String?
 
   mutating func run() throws {
-    try swiftFormat.run()
-    swiftFormat.waitUntilExit()
 
-    try swiftLint.run()
-    swiftLint.waitUntilExit()
+    // Separate running Swiftgen or the lint/formatting
+    if (assetsGeneration) {
+      try swiftGen.run()
+      swiftGen.waitUntilExit()
+    } else {
+      try swiftFormat.run()
+      swiftFormat.waitUntilExit()
+
+      try swiftLint.run()
+      swiftLint.waitUntilExit()
+    }
 
     if log {
       log(swiftFormat.shellCommand)
       log(swiftLint.shellCommand)
+      log(swiftGen.shellCommand)
       log("SwiftFormat ended with exit code \(swiftFormat.terminationStatus)")
       log("SwiftLint ended with exit code \(swiftLint.terminationStatus)")
+      log("SwiftGen ended with exit code \(swiftGen.terminationStatus)")
     }
 
     if
       swiftFormat.terminationStatus == SwiftFormatExitCode.lintFailure ||
-      swiftLint.terminationStatus == SwiftLintExitCode.lintFailure
+      swiftLint.terminationStatus == SwiftLintExitCode.lintFailure  ||
+      swiftGen.terminationStatus == SwiftGenExitCode.lintFailure
     {
       throw ExitCode.failure
     }
@@ -68,6 +87,10 @@ struct AirbnbSwiftFormatTool: ParsableCommand {
 
     if swiftLint.terminationStatus != EXIT_SUCCESS {
       throw ExitCode(swiftLint.terminationStatus)
+    }
+
+     if swiftGen.terminationStatus != EXIT_SUCCESS {
+      throw ExitCode(swiftGen.terminationStatus)
     }
   }
 
@@ -119,9 +142,20 @@ struct AirbnbSwiftFormatTool: ParsableCommand {
     return swiftLint
   }()
 
+  private lazy var swiftGen: Process = {
+     var arguments = directories + [
+      "config", swiftGenConfig,
+    ]
+
+    let swiftGen = Process()
+    swiftGen.launchPath = swiftGenPath
+    swiftGen.arguments = arguments
+    return swiftGen
+}()
+
   private func log(_ string: String) {
     // swiftlint:disable:next no_direct_standard_out_logs
-    print("[AibnbSwiftFormatTool]", string)
+    print("[MylerSwiftFormatTool]", string)
   }
 
 }
@@ -146,4 +180,11 @@ enum SwiftFormatExitCode {
 /// Known exit codes used by SwiftLint
 enum SwiftLintExitCode {
   static let lintFailure: Int32 = 2
+}
+
+// MARK: - SwiftGetExitCode
+
+/// Known exit codes used by SwiftGen
+enum SwiftGenExitCode {
+  static let lintFailure: Int32 = 1
 }
