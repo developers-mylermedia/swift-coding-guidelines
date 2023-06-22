@@ -50,7 +50,7 @@ let package = Package(
     .binaryTarget(
         name: "SwiftGen",
         url: "https://github.com/SwiftGen/SwiftGen/releases/download/6.6.2/swiftgen-6.6.2.artifactbundle.zip",
-        checksum: "729d5f2d0c18cc407f82bb416827fb6897bc2eb422f6a776492fa28551f18820"),
+        checksum: "7586363e24edcf18c2da3ef90f379e9559c1453f48ef5e8fbc0b818fbbc3a045"),
   ])
 
 // Emit an error on Linux, so Swift Package Manager's platform support detection doesn't say this package supports Linux
