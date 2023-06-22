@@ -50,9 +50,9 @@ struct MylerSwiftFormatTool: ParsableCommand {
 
     // Separate running Swiftgen or the lint/formatting
     if swiftGenConfig != nil {
-      runSwiftGen()
+      try runSwiftGen()
     } else {
-      runFormatAndLint()
+      try runFormatAndLint()
     }
   }
 
