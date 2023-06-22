@@ -35,7 +35,6 @@ let package = Package(
       resources: [
         .process("default.swiftformat"),
         .process("swiftlint.yml"),
-        .process("swiftgen.yml"),
       ]),
 
     .binaryTarget(
