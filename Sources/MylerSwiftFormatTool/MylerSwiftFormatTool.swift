@@ -56,7 +56,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
     }
   }
 
-  private mutating func runFormatAndLint() {
+  private mutating func runFormatAndLint() throws {
     try swiftFormat.run()
     swiftFormat.waitUntilExit()
 
@@ -86,7 +86,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
     }
   }
   
-  private mutating func runSwiftGen() {
+  private mutating func runSwiftGen() throws {
      try swiftGen.run()
      swiftGen.waitUntilExit()
 
