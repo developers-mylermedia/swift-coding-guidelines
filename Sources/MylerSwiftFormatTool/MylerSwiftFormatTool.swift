@@ -158,7 +158,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
       return Process()
     }
     
-    var arguments = directories + [
+    var arguments = [
       "--config", config,
     ]
 
