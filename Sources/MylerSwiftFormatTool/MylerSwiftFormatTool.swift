@@ -31,9 +31,6 @@ struct MylerSwiftFormatTool: ParsableCommand {
   @Flag(help: "When true, source files are not reformatted")
   var lint = false
 
-  @Flag(help: "When true, skips lint and format and run SwiftGen")
-  var assetsGeneration = false
-
   @Flag(help: "When true, logs the commands that are executed")
   var log = false
 
@@ -44,7 +41,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
   var swiftLintConfig = Bundle.module.path(forResource: "swiftlint", ofType: "yml")!
 
   @Option(help: "The absolute path to the SwiftLint config file")
-  var swiftGenConfig = Bundle.module.path(forResource: "swiftgen", ofType: "yml")!
+  var swiftGenConfig: String?
 
   @Option(help: "The project's minimum Swift version")
   var swiftVersion: String?
@@ -52,7 +49,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
   mutating func run() throws {
 
     // Separate running Swiftgen or the lint/formatting
-    if (assetsGeneration) {
+    if !swiftGenConfig {
       try swiftGen.run()
       swiftGen.waitUntilExit()
     } else {
