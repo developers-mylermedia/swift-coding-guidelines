@@ -49,7 +49,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
   mutating func run() throws {
 
     // Separate running Swiftgen or the lint/formatting
-    if !swiftGenConfig {
+    if swiftGenConfig != nil {
       try swiftGen.run()
       swiftGen.waitUntilExit()
     } else {
