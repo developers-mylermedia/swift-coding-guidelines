@@ -35,6 +35,8 @@ struct MylerSwiftFormatPlugin {
       try context.tool(named: "swiftformat").path.string,
       "--swift-lint-path",
       try context.tool(named: "swiftlint").path.string,
+      "--swift-gen-path",
+      try context.tool(named: "swiftgen").path.string,
       // The process we spawn doesn't have read/write access to the default
       // cache file locations, so we pass in our own cache paths from
       // the plugin's work directory.
