@@ -52,11 +52,11 @@ struct MylerSwiftFormatTool: ParsableCommand {
     if swiftGenConfig != nil {
       runSwiftGen()
     } else {
-      runFormatAndLint
+      runFormatAndLint()
     }
   }
 
-  private func runFormatAndLint() {
+  private mutating func runFormatAndLint() {
     try swiftFormat.run()
     swiftFormat.waitUntilExit()
 
@@ -86,7 +86,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
     }
   }
   
-  private func runSwiftGen() {
+  private mutating func runSwiftGen() {
      try swiftGen.run()
      swiftGen.waitUntilExit()
 
