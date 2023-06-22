@@ -50,30 +50,29 @@ struct MylerSwiftFormatTool: ParsableCommand {
 
     // Separate running Swiftgen or the lint/formatting
     if swiftGenConfig != nil {
-      try swiftGen.run()
-      swiftGen.waitUntilExit()
+      runSwiftGen()
     } else {
-      try swiftFormat.run()
-      swiftFormat.waitUntilExit()
-
-      try swiftLint.run()
-      swiftLint.waitUntilExit()
+      runFormatAndLint
     }
+  }
+
+  private func runFormatAndLint() {
+    try swiftFormat.run()
+    swiftFormat.waitUntilExit()
+
+    try swiftLint.run()
+    swiftLint.waitUntilExit()
 
     if log {
       log(swiftFormat.shellCommand)
       log(swiftLint.shellCommand)
-      log(swiftGen.shellCommand)
       log("SwiftFormat ended with exit code \(swiftFormat.terminationStatus)")
       log("SwiftLint ended with exit code \(swiftLint.terminationStatus)")
-      log("SwiftGen ended with exit code \(swiftGen.terminationStatus)")
     }
 
     if
       swiftFormat.terminationStatus == SwiftFormatExitCode.lintFailure ||
-      swiftLint.terminationStatus == SwiftLintExitCode.lintFailure  ||
-      swiftGen.terminationStatus == SwiftGenExitCode.lintFailure
-    {
+      swiftLint.terminationStatus == SwiftLintExitCode.lintFailure {
       throw ExitCode.failure
     }
 
@@ -85,12 +84,26 @@ struct MylerSwiftFormatTool: ParsableCommand {
     if swiftLint.terminationStatus != EXIT_SUCCESS {
       throw ExitCode(swiftLint.terminationStatus)
     }
+  }
+  
+  private func runSwiftGen() {
+     try swiftGen.run()
+     swiftGen.waitUntilExit()
 
-     if swiftGen.terminationStatus != EXIT_SUCCESS {
+    if log {
+      log(swiftGen.shellCommand)
+      log("SwiftGen ended with exit code \(swiftGen.terminationStatus)")
+    }
+
+    if swiftGen.terminationStatus == SwiftGenExitCode.lintFailure {
+      throw ExitCode.failure
+    }
+
+    if swiftGen.terminationStatus != EXIT_SUCCESS {
       throw ExitCode(swiftGen.terminationStatus)
     }
   }
-
+  
   // MARK: Private
 
   private lazy var swiftFormat: Process = {
