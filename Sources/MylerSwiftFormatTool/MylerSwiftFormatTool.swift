@@ -141,7 +141,9 @@ struct MylerSwiftFormatTool: ParsableCommand {
 
   private lazy var swiftGen: Process = {
     // Unwrap this config to make sure its a [string] array instead of [any]
-    guard let config = swiftGenConfig else { return }
+    guard let config = swiftGenConfig else { 
+      return Process()
+    }
     
     var arguments = directories + [
       "config", config,
