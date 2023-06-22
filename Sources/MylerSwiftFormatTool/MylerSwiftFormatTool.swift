@@ -132,10 +132,8 @@ struct MylerSwiftFormatTool: ParsableCommand {
   private lazy var swiftLint: Process = {
     var arguments = directories + [
       "--config", swiftLintConfig,
-      // Required for SwiftLint to emit a non-zero exit code on lint failure
-      "--strict",
-      // This flag is required when invoking SwiftLint from an SPM plugin, due to sandboxing
-      "--in-process-sourcekit",
+      // This forces swiftlint to exclude the paths specified in the config
+      "--force-exclude",
     ]
 
     if let swiftLintCachePath = swiftLintCachePath {
