@@ -9,7 +9,6 @@ import Foundation
 struct MylerSwiftFormatTool: ParsableCommand {
 
   // MARK: Internal
-
   @Argument(help: "The directories to format")
   var directories: [String]
 
@@ -52,27 +51,25 @@ struct MylerSwiftFormatTool: ParsableCommand {
     if swiftGenConfig != nil {
       try runSwiftGen()
     } else {
-      try runFormatAndLint()
+      if lint {
+        try runLint()
+      } else {
+        try runFormat()
+      }
     }
   }
 
-  private mutating func runFormatAndLint() throws {
+  // MARK: Private
+  private mutating func runFormat() throws {
     try swiftFormat.run()
     swiftFormat.waitUntilExit()
 
-    try swiftLint.run()
-    swiftLint.waitUntilExit()
-
     if log {
       log(swiftFormat.shellCommand)
-      log(swiftLint.shellCommand)
       log("SwiftFormat ended with exit code \(swiftFormat.terminationStatus)")
-      log("SwiftLint ended with exit code \(swiftLint.terminationStatus)")
     }
 
-    if
-      swiftFormat.terminationStatus == SwiftFormatExitCode.lintFailure ||
-      swiftLint.terminationStatus == SwiftLintExitCode.lintFailure {
+    if swiftFormat.terminationStatus == SwiftFormatExitCode.lintFailure {
       throw ExitCode.failure
     }
 
@@ -80,7 +77,22 @@ struct MylerSwiftFormatTool: ParsableCommand {
     if swiftFormat.terminationStatus != EXIT_SUCCESS {
       throw ExitCode(swiftFormat.terminationStatus)
     }
+  }
 
+  private mutating func runLint() throws {
+    try swiftLint.run()
+    swiftLint.waitUntilExit()
+
+    if log {
+      log(swiftLint.shellCommand)
+      log("SwiftLint ended with exit code \(swiftLint.terminationStatus)")
+    }
+
+    if swiftLint.terminationStatus == SwiftLintExitCode.lintFailure {
+      throw ExitCode.failure
+    }
+
+    // Any other non-success exit code is an unknown failure
     if swiftLint.terminationStatus != EXIT_SUCCESS {
       throw ExitCode(swiftLint.terminationStatus)
     }
@@ -103,8 +115,6 @@ struct MylerSwiftFormatTool: ParsableCommand {
       throw ExitCode(swiftGen.terminationStatus)
     }
   }
-  
-  // MARK: Private
 
   private lazy var swiftFormat: Process = {
     var arguments = directories + [
