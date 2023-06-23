@@ -156,7 +156,7 @@ struct MylerSwiftFormatTool: ParsableCommand {
     }
 
     if let swiftLintOutput = swiftLintOutput {
-      arguments += ["--output", swiftLintOutput
+      arguments += ["--output", swiftLintOutput,
                    "--quiet"]
     }
 
