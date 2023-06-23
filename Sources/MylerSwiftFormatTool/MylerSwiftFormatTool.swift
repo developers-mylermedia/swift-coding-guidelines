@@ -39,7 +39,10 @@ struct MylerSwiftFormatTool: ParsableCommand {
   @Option(help: "The absolute path to the SwiftLint config file")
   var swiftLintConfig = Bundle.module.path(forResource: "swiftlint", ofType: "yml")!
 
-  @Option(help: "The absolute path to the SwiftLint config file")
+  @Option(help: "The absolute path for Swiftlint to write the output to")
+  var swiftLintOutput: String?
+  
+  @Option(help: "The absolute path to the SwiftGen config file")
   var swiftGenConfig: String?
 
   @Option(help: "The project's minimum Swift version")
@@ -142,8 +145,6 @@ struct MylerSwiftFormatTool: ParsableCommand {
   private lazy var swiftLint: Process = {
     var arguments = directories + [
       "--config", swiftLintConfig,
-      // This forces swiftlint to exclude the paths specified in the config
-      "--force-exclude",
     ]
 
     if let swiftLintCachePath = swiftLintCachePath {
@@ -152,6 +153,11 @@ struct MylerSwiftFormatTool: ParsableCommand {
 
     if !lint {
       arguments += ["--fix"]
+    }
+
+    if let swiftLintOutput = swiftLintOutput {
+      arguments += ["--output", swiftLintOutput
+                   "--quiet"]
     }
 
     let swiftLint = Process()
