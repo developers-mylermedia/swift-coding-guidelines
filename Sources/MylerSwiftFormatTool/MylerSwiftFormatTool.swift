@@ -33,6 +33,9 @@ struct MylerSwiftFormatTool: ParsableCommand {
   @Flag(help: "When true, logs the commands that are executed")
   var log = false
 
+  @Flag(help: "When true, it throws a linting error on failure")
+  var swiftLintError = false
+
   @Option(help: "The absolute path to the SwiftFormat config file")
   var swiftFormatConfig = Bundle.module.path(forResource: "default", ofType: "swiftformat")!
 
@@ -91,12 +94,12 @@ struct MylerSwiftFormatTool: ParsableCommand {
       log("SwiftLint ended with exit code \(swiftLint.terminationStatus)")
     }
 
-    if swiftLint.terminationStatus == SwiftLintExitCode.lintFailure {
+    if swiftLintError && swiftLint.terminationStatus == SwiftLintExitCode.lintFailure {
       throw ExitCode.failure
     }
 
     // Any other non-success exit code is an unknown failure
-    if swiftLint.terminationStatus != EXIT_SUCCESS {
+    if swiftLintError && swiftLint.terminationStatus != EXIT_SUCCESS {
       throw ExitCode(swiftLint.terminationStatus)
     }
   }
