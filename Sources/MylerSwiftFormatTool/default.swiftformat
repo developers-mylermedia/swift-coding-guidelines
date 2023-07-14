@@ -111,6 +111,5 @@
 --rules wrapArguments
 --rules wrapAttributes
 --rules wrapEnumCases
---rules wrapMultilineStatementBraces
 --rules wrapSingleLineComments
 --rules wrapSwitchCases
