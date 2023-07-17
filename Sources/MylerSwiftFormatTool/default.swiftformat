@@ -64,7 +64,6 @@
 --rules modifierOrder
 --rules opaqueGenericParameters
 --rules organizeDeclarations
---rules preferKeyPath
 --rules redundantBackticks
 --rules redundantBreak
 --rules redundantClosure
