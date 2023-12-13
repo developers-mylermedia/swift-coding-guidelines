@@ -27,6 +27,9 @@ struct MylerSwiftFormatTool: ParsableCommand {
   @Option(help: "The absolute path to a SwiftGen binary")
   var swiftGenPath: String
 
+  @Flag(help: "Use Xcode SCRIPT_INPUT_FILE as input")
+  var scriptinput = false
+  
   @Flag(help: "When true, source files are not reformatted")
   var lint = false
 
@@ -135,6 +138,10 @@ struct MylerSwiftFormatTool: ParsableCommand {
       arguments += ["--lint"]
     }
 
+    if scriptinput {
+      arguments += ["--scriptinput"]
+    }
+
     if let swiftVersion = swiftVersion {
       arguments += ["--swiftversion", swiftVersion]
     }
@@ -156,6 +163,10 @@ struct MylerSwiftFormatTool: ParsableCommand {
 
     if !lint {
       arguments += ["--fix"]
+    }
+
+    if scriptinput {
+      arguments += ["--use-script-input-files"]
     }
 
     if let swiftLintOutput = swiftLintOutput {
